@@ -1,0 +1,42 @@
+"""
+Best-effort Vercel entry point for the Streamlit app.
+
+IMPORTANT: Vercel runs Python as short-lived *serverless functions* and does not
+support the long-running WebSocket server that Streamlit needs. This file is
+provided only because Vercel was specifically requested; it launches Streamlit
+as a subprocess as a best-effort hack, but it is NOT reliable on Vercel and may
+time out or fail to hold a WebSocket connection.
+
+For a deployment that actually works, use Streamlit Community Cloud, Render,
+Railway, Hugging Face Spaces, or any Docker host (see README.md).
+"""
+import os
+import subprocess
+import sys
+
+# Path to the Streamlit app one level up from /api
+APP = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "app.py")
+
+
+def handler(event=None, context=None):
+    """Serverless handler — attempts to boot Streamlit (best-effort only)."""
+    port = os.environ.get("PORT", "8501")
+    subprocess.Popen(
+        [
+            sys.executable, "-m", "streamlit", "run", APP,
+            "--server.port", port,
+            "--server.address", "0.0.0.0",
+            "--server.headless", "true",
+        ]
+    )
+    return {
+        "statusCode": 200,
+        "headers": {"Content-Type": "text/plain"},
+        "body": "Streamlit launch attempted. If this fails, deploy on Streamlit "
+                "Cloud / Render / Hugging Face Spaces instead (see README.md).",
+    }
+
+
+# Allow `python api/index.py` locally
+if __name__ == "__main__":
+    print(handler())
