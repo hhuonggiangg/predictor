@@ -619,7 +619,7 @@ def _sample_data():
 
 @st.cache_data
 def load_data():
-    for path in ("data/spotify_songs_expanded.csv", "spotify_songs_expanded.csv"):
+    for path in ("spotify_songs_expanded.csv", "spotify_songs_expanded.csv"):
         try:
             return pd.read_csv(path)
         except Exception:
