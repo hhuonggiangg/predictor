@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.git
+.gitignore
+*.log
+.vercel
+node_modules/
+README.md
